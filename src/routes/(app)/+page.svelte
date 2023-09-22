@@ -4,7 +4,7 @@
 	let roomId = '';
 
 	const createRoom = () => {
-		goto('/room');
+		goto('/room/');
 	};
 
 	const findMatch = () => {
@@ -12,7 +12,7 @@
 	};
 
 	const joinRoom = () => {
-		console.log('join room ' + roomId);
+		goto(`/room/${roomId}`);
 	};
 </script>
 

@@ -14,15 +14,13 @@ let board: Board;
 export function start() {
     board = createBoard();
     socket = new WebSocket('ws://chess-server-for39.ondigitalocean.app/ws/room/create');
-    socket.addEventListener('open', function () {
+    registerHandlers(socket);
+}
 
-    });
-
-    socket.addEventListener('message', function (event: MessageEvent) {
-        const message: Message = JSON.parse(event.data);
-        handleMessage(message);
-    });
-
+export function join(roomId: string) {
+    board = createBoard();
+    socket = new WebSocket(`ws://chess-server-for39.ondigitalocean.app/ws/room/${roomId}`);
+    registerHandlers(socket);
 }
 
 export function disconnect() {
@@ -37,6 +35,17 @@ export function move(from: string, to: string) {
         }
     }
     socket.send(JSON.stringify(message));
+}
+
+function registerHandlers(socket: WebSocket) {
+    socket.addEventListener('open', function () {
+
+    });
+
+    socket.addEventListener('message', function (event: MessageEvent) {
+        const message: Message = JSON.parse(event.data);
+        handleMessage(message);
+    });
 }
 
 function handleMessage(message: Message) {

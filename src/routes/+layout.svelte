@@ -8,7 +8,7 @@
 
 <style>
 	.chess-background {
-		background-image: url('src/assets/chess-background.jpg');
+		background-image: url('$lib/assets/chess-background.jpg');
 		background-size: cover;
 		background-position: center;
 		background-repeat: no-repeat;
