@@ -1,4 +1,4 @@
-export enum Piece {
+export enum PieceType {
     Pawn = 'pawn',
     Knight = 'knight',
     Bishop = 'bishop',

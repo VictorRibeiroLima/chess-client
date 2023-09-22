@@ -1,5 +1,5 @@
 import type { Color } from "../enums/color";
-import type { Piece } from "../enums/piece";
+import type { PieceType } from "../enums/piece-type";
 
 export type Message = {
     success?: SuccessMessage;
@@ -21,7 +21,7 @@ export type SuccessMessage = {
 export type Result = PromotionResult | WinnerResult | ConnectResult | DisconnectResult | MovementResult;
 
 export type PromotionResult = {
-    promotion: [string, Piece]
+    promotion: [string, PieceType]
 }
 
 export type WinnerResult = {

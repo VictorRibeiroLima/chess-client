@@ -19,5 +19,6 @@
 		align-items: center;
 		text-align: center;
 		color: white;
+		z-index: 11;
 	}
 </style>
