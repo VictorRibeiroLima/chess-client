@@ -32,14 +32,10 @@
 	import { Color } from '$lib/enums/color';
 	import type { Piece as PieceType } from '../lib/types/piece';
 	export let piece: PieceType;
-
-	const onDragStart = (event: DragEvent) => {
-		console.log(event.target);
-	};
 </script>
 
 {#if piece}
-	<div class="piece" draggable="true" role="button" tabindex="0" on:dragstart={onDragStart}>
+	<div class="piece">
 		<img
 			class="piece-image"
 			src={images[piece.color + piece.type]}
@@ -52,12 +48,12 @@
 	.piece {
 		width: 100px;
 		height: 100px;
-		z-index: 2;
+		z-index: 1;
 	}
 
 	.piece-image {
 		width: 100%;
 		height: 100%;
-		z-index: 1;
+		z-index: -9;
 	}
 </style>

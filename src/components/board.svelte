@@ -6,12 +6,27 @@
 
 	export let board: BoardType;
 
+	let rows = [0, 1, 2, 3, 4, 5, 6, 7];
+	let columns = [0, 1, 2, 3, 4, 5, 6, 7];
+
 	if (board.playerColor === Color.White) {
-		board.pieces = board.pieces.reverse();
+		rows = rows.reverse();
 	}
 
-	const light = '#eed4ac';
-	const dark = '#ac7d58';
+	let from: string;
+	let to: string;
+
+	const onDragStart = (event: DragEvent) => {
+		const square = event.currentTarget as HTMLDivElement;
+		from = square.id;
+	};
+
+	const onDragDrop = (event: DragEvent) => {
+		event.stopPropagation();
+		const square = event.currentTarget as HTMLDivElement;
+		to = square.id;
+		console.log(from, to);
+	};
 </script>
 
 <div>
@@ -19,9 +34,15 @@
 		<p>Loading...</p>
 	{:then board}
 		<div class="board" draggable="false">
-			{#each board.pieces as row, i}
-				{#each row as piece, j}
-					<Square {i} {j}><Piece {piece} /></Square>
+			{#each rows as row, x}
+				{#each columns as column, y}
+					{#if board.pieces[row][column]}
+						<Square {x} {y} {row} {column} {onDragStart} {onDragDrop} role="button"
+							><Piece piece={board.pieces[row][column]} /></Square
+						>
+					{:else}
+						<Square {x} {y} {row} {column} {onDragDrop} role="none" />
+					{/if}
 				{/each}
 			{/each}
 		</div>
