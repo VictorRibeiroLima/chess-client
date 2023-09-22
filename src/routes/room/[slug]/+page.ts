@@ -5,3 +5,4 @@ export function load({ params }) {
         roomId: params.slug,
     }
 }
+
