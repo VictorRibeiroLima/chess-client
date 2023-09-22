@@ -1,19 +1,20 @@
 <script lang="ts">
 	import Board from '../../../components/board.svelte';
+	import type { Board as BoardType } from '$lib/types/board';
 	import { onDestroy, onMount } from 'svelte';
-	import { createBoard, disconnect, roomStore, start } from '$lib';
-
-	const width = 800;
-	const height = 800;
+	import { disconnect, roomStore, start } from '$lib';
 
 	let roomId = '';
 
-	const board = createBoard();
+	let board: BoardType;
 
 	onMount(() => {
 		start();
-		roomStore.subscribe((room) => {
-			roomId = room;
+		roomStore.subscribe((state) => {
+			if (state.board) {
+				roomId = state.roomId;
+				board = state.board;
+			}
 		});
 	});
 
@@ -23,7 +24,11 @@
 </script>
 
 <div>
-	<h1 class="font-extrabold" style="font-size: xx-large; color: sienna;">Room: {roomId}</h1>
-	<br />
-	<Board {board} />
+	{#if board}
+		<h1 class="font-extrabold" style="font-size: xx-large; color: sienna;">Room: {roomId}</h1>
+		<br />
+		<Board {board} />
+	{:else}
+		<h1 class="font-extrabold" style="font-size: xx-large; color: sienna;">Loading...</h1>
+	{/if}
 </div>

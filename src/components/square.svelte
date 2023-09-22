@@ -1,7 +1,7 @@
 <script lang="ts">
 	export let x: number;
 	export let y: number;
-	export let column: number;
+	export let column: string;
 	export let row: number;
 	export let onDragStart = (event: DragEvent) => {
 		event.preventDefault();
@@ -31,7 +31,7 @@
     background-color: {color};
     z-index: 9;
     "
-	id={`${row}-${column}`}
+	id={`${column}${row}`}
 	{role}
 	tabindex="-1"
 	draggable="true"

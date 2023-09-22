@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { move } from '$lib/connection/client';
 	import { Color } from '$lib/enums/color';
 	import type { Board as BoardType } from '../lib/types/board';
 	import Piece from './piece.svelte';
@@ -6,8 +7,8 @@
 
 	export let board: BoardType;
 
-	let rows = [0, 1, 2, 3, 4, 5, 6, 7];
-	let columns = [0, 1, 2, 3, 4, 5, 6, 7];
+	let rows = [1, 2, 3, 4, 5, 6, 7, 8];
+	let columns = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 
 	if (board.playerColor === Color.White) {
 		rows = rows.reverse();
@@ -25,7 +26,9 @@
 		event.stopPropagation();
 		const square = event.currentTarget as HTMLDivElement;
 		to = square.id;
-		console.log(from, to);
+		if (from !== to) {
+			move(from, to);
+		}
 	};
 </script>
 
@@ -36,9 +39,9 @@
 		<div class="board" draggable="false">
 			{#each rows as row, x}
 				{#each columns as column, y}
-					{#if board.pieces[row][column]}
+					{#if board.pieces[row - 1][y]}
 						<Square {x} {y} {row} {column} {onDragStart} {onDragDrop} role="button"
-							><Piece piece={board.pieces[row][column]} /></Square
+							><Piece piece={board.pieces[row - 1][y]} /></Square
 						>
 					{:else}
 						<Square {x} {y} {row} {column} {onDragDrop} role="none" />
