@@ -13,13 +13,13 @@ let board: Board;
 
 export function start() {
     board = createBoard();
-    socket = new WebSocket('ws://chess-server-for39.ondigitalocean.app/ws/room/create');
+    socket = new WebSocket('wss://chess-server-for39.ondigitalocean.app/ws/room/create');
     registerHandlers(socket);
 }
 
 export function join(roomId: string) {
     board = createBoard();
-    socket = new WebSocket(`ws://chess-server-for39.ondigitalocean.app/ws/room/${roomId}`);
+    socket = new WebSocket(`wss://chess-server-for39.ondigitalocean.app/ws/room/${roomId}`);
     registerHandlers(socket);
 }
 
