@@ -75,11 +75,11 @@ function handleSuccess(message: SuccessMessage, state: RoomState) {
         state.enemyId = message.clientId;
     }
     if ((result as MovementResult).movement) {
-        handleMovementResult(result as MovementResult);
+        handleMovementResult(result as MovementResult, state);
     } else if ((result as DisconnectResult).disconnect) {
         handleDisconnectResult(result as DisconnectResult, state);
     } else if ((result as PromotionResult).promotion) {
-        handlePromotionResult(result as PromotionResult);
+        handlePromotionResult(result as PromotionResult, state);
     } else if ((result as WinnerResult).winner) {
         handleWinnerResult(result as WinnerResult, state);
     }
@@ -107,7 +107,8 @@ function handleDisconnectResult(result: DisconnectResult, state: RoomState) {
     }
 }
 
-function handleMovementResult(result: MovementResult) {
+function handleMovementResult(result: MovementResult, state: RoomState) {
+    console.log(`Move: ${JSON.stringify(result.movement)}`);
     const movement = result.movement;
     const type = Object.keys(movement)[0];
     const move = movement[type];
@@ -124,14 +125,18 @@ function handleMovementResult(result: MovementResult) {
         board.move(kingMove[0], kingMove[1]);
         board.move(rookMove[0], rookMove[1]);
     }
+    state.check = movement.check === board.playerColor;
+    state.promotion = movement.promotion === board.playerColor;
 }
 
-function handlePromotionResult(result: PromotionResult) {
+function handlePromotionResult(result: PromotionResult, state: RoomState) {
     const promotion = result.promotion;
     const on = promotion[0];
     const to = promotion[1];
 
     board.promote(on, to);
+    state.promotion = false;
+    state.check = promotion.check === board.playerColor;
 }
 
 function handleWinnerResult(result: WinnerResult, state: RoomState) {

@@ -8,4 +8,6 @@ export type RoomState = {
     roomId?: string;
     winner?: Color;
     error?: string;
+    promotion: boolean;
+    check: boolean;
 }

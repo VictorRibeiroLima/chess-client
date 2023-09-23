@@ -21,7 +21,11 @@ export type SuccessMessage = {
 export type Result = PromotionResult | WinnerResult | ConnectResult | DisconnectResult | MovementResult;
 
 export type PromotionResult = {
-    promotion: [string, PieceType]
+    promotion: {
+        type: PieceType;
+        position: string;
+        check?: Color;
+    }
 }
 
 export type WinnerResult = {
@@ -44,30 +48,37 @@ export type DisconnectResult = {
     }
 }
 
+
+
 export type MovementResult = {
     movement: Move;
+}
+
+type BasicMoveResult = {
+    check?: Color;
+    promotion?: Color;
 }
 
 export type Move = MoveValid | MoveCapture | MoveCastling | MoveEnPassant | MoveInitialDoubleAdvance;
 
 export type MoveValid = {
     valid: [string, string];
-}
+} & BasicMoveResult;
 
 export type MoveCapture = {
     capture: [string, string];
-}
+} & BasicMoveResult;
 
 export type MoveCastling = {
     castling: [[string, string], [string, string]];
-}
+} & BasicMoveResult;
 
 export type MoveEnPassant = {
     enPassant: [string, string];
-}
+} & BasicMoveResult;
 
 export type MoveInitialDoubleAdvance = {
     initialDoubleAdvance: [string, string];
-}
+} & BasicMoveResult;
 
 

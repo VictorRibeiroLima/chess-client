@@ -9,7 +9,14 @@
 
 	let error: string = undefined;
 	let enemyId: string = undefined;
+
+	//TODO: Reset button on winner
 	let winner: Color = undefined;
+
+	//TODO: Open modal for promotion
+	let promotion: boolean = false;
+
+	let check: boolean = false;
 
 	let board: BoardType;
 
@@ -22,6 +29,7 @@
 				error = state.error;
 				winner = state.winner;
 				enemyId = state.enemyId;
+				check = state.check;
 			}
 		});
 	});
@@ -37,6 +45,9 @@
 		<br />
 		{#if error}
 			<h1 class="font-extrabold" style="font-size: large; color: sienna;">{error}</h1>
+		{/if}
+		{#if check}
+			<h1 class="font-extrabold" style="font-size: large; color: sienna;">You are in check!</h1>
 		{/if}
 		{#if winner}
 			<h1 class="font-extrabold" style="font-size: large; color: sienna;">{winner} won!</h1>
