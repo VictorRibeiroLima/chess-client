@@ -25,7 +25,7 @@ export type PromotionResult = {
 }
 
 export type WinnerResult = {
-    winner: string;
+    winner: Color;
 }
 
 export type ConnectResult = {
