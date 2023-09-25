@@ -36,7 +36,6 @@
 	onMount(() => {
 		roomStore.subscribe((state) => {
 			if (state.board) {
-				console.log(state);
 				roomId = state.roomId;
 				board = state.board;
 				error = state.error;

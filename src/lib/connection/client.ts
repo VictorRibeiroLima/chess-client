@@ -49,11 +49,12 @@ export function promote(to: Piece) {
 }
 
 function registerHandlers(socket: WebSocket) {
-    socket.addEventListener('open', function () {
-
+    socket.addEventListener('open', function (event: MessageEvent) {
+        console.log(event);
     });
 
     socket.addEventListener('message', function (event: MessageEvent) {
+        console.log(event);
         const message: Message = JSON.parse(event.data);
         handleMessage(message);
     });

@@ -7,8 +7,20 @@
 		goto('/room/');
 	};
 
-	const findMatch = () => {
-		console.log('find match');
+	const findMatch = async () => {
+		const resp = await fetch('https://chess-server-for39.ondigitalocean.app/api/room/', {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+
+		const data: string[] = await resp.json();
+		if (data.length > 0) {
+			goto(`/room/${data[0]}`);
+		} else {
+			goto('/room/');
+		}
 	};
 
 	const joinRoom = () => {
