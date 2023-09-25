@@ -6,7 +6,10 @@
 	export let onDragStart = (event: DragEvent) => {
 		event.preventDefault();
 	};
-	export let onDragDrop: (event: DragEvent) => void;
+	export let onDragDrop = (event: DragEvent) => {
+		event.preventDefault();
+	};
+	export let onClick = (event: MouseEvent) => {};
 	export let role: string;
 	let color: string;
 
@@ -38,6 +41,7 @@
 	on:dragstart={onDragStart}
 	on:dragover={onDragOver}
 	on:drop={onDragDrop}
+	on:click={onClick}
 >
 	<slot />
 </div>

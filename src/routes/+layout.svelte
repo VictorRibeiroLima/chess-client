@@ -1,8 +1,12 @@
 <script>
 	import '../app.postcss';
+	import { Modal, initializeStores } from '@skeletonlabs/skeleton';
+
+	initializeStores();
 </script>
 
-<div class="chess-background">
+<Modal background={'bg-primary-300'} />
+<div class="chess-background bg-primary-900">
 	<slot />
 </div>
 

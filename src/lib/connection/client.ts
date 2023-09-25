@@ -1,5 +1,6 @@
 import { createBoard } from '$lib';
 import type { Board } from '$lib/types/board';
+import type { Piece } from '$lib/types/piece';
 import type { RoomState } from './client-types';
 import type { ConnectResult, DisconnectResult, ErrorMessage, Message, MovementResult, PromotionResult, SuccessMessage, WinnerResult } from './server-types';
 import { get, readonly, writable } from 'svelte/store';
@@ -34,6 +35,16 @@ export function move(from: string, to: string) {
             to: to,
         }
     }
+    socket.send(JSON.stringify(message));
+}
+
+export function promote(to: Piece) {
+    const message = {
+        promote: {
+            piece: to.type
+        }
+    }
+
     socket.send(JSON.stringify(message));
 }
 
@@ -130,9 +141,12 @@ function handleMovementResult(result: MovementResult, state: RoomState) {
 }
 
 function handlePromotionResult(result: PromotionResult, state: RoomState) {
+
+    console.log(`Promotion: ${JSON.stringify(result.promotion)}`);
+
     const promotion = result.promotion;
-    const on = promotion[0];
-    const to = promotion[1];
+    const on = promotion.position;
+    const to = promotion.piece;
 
     board.promote(on, to);
     state.promotion = false;

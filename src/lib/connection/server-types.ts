@@ -22,7 +22,7 @@ export type Result = PromotionResult | WinnerResult | ConnectResult | Disconnect
 
 export type PromotionResult = {
     promotion: {
-        type: PieceType;
+        piece: PieceType;
         position: string;
         check?: Color;
     }

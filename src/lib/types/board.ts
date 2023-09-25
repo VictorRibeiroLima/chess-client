@@ -23,6 +23,7 @@ export class Board {
             color: piece.color,
             type: to
         };
+        console.log(toPiece);
         this.pieces[y][x] = toPiece;
     }
 

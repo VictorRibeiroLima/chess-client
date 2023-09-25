@@ -4,21 +4,34 @@
 	import { disconnect, roomStore } from '$lib';
 	import Board from './board.svelte';
 	import type { Color } from '$lib/enums/color';
-
+	import { getModalStore, type ModalComponent, type ModalSettings } from '@skeletonlabs/skeleton';
+	import Promotion from './promotion.svelte';
+	const modalStore = getModalStore();
 	let roomId = '';
-
 	let error: string = undefined;
 	let enemyId: string = undefined;
-
 	//TODO: Reset button on winner
 	let winner: Color = undefined;
-
-	//TODO: Open modal for promotion
-	let promotion: boolean = false;
-
 	let check: boolean = false;
-
 	let board: BoardType;
+
+	const loadModal = () => {
+		const modalComponent: ModalComponent = {
+			// Pass a reference to your custom component
+			ref: Promotion,
+
+			props: {
+				color: board?.playerColor
+			}
+		};
+
+		const modal: ModalSettings = {
+			type: 'component',
+
+			component: modalComponent
+		};
+		modalStore.trigger(modal);
+	};
 
 	onMount(() => {
 		roomStore.subscribe((state) => {
@@ -30,6 +43,9 @@
 				winner = state.winner;
 				enemyId = state.enemyId;
 				check = state.check;
+				if (state.promotion) {
+					loadModal();
+				}
 			}
 		});
 	});
