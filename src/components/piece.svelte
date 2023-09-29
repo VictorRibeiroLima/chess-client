@@ -1,46 +1,12 @@
-<script context="module">
-	import { PieceType as PieceTypeEnum } from '$lib/enums/piece-type';
-	const images = {
-		[Color.Black + PieceTypeEnum.King]:
-			'https://upload.wikimedia.org/wikipedia/commons/f/f0/Chess_kdt45.svg',
-		[Color.Black + PieceTypeEnum.Queen]:
-			'https://upload.wikimedia.org/wikipedia/commons/4/47/Chess_qdt45.svg',
-		[Color.Black + PieceTypeEnum.Rook]:
-			'https://upload.wikimedia.org/wikipedia/commons/f/ff/Chess_rdt45.svg',
-		[Color.Black + PieceTypeEnum.Bishop]:
-			'https://upload.wikimedia.org/wikipedia/commons/9/98/Chess_bdt45.svg',
-		[Color.Black + PieceTypeEnum.Knight]:
-			'https://upload.wikimedia.org/wikipedia/commons/e/ef/Chess_ndt45.svg',
-		[Color.Black + PieceTypeEnum.Pawn]:
-			'https://upload.wikimedia.org/wikipedia/commons/c/c7/Chess_pdt45.svg',
-		[Color.White + PieceTypeEnum.King]:
-			'https://upload.wikimedia.org/wikipedia/commons/4/42/Chess_klt45.svg',
-		[Color.White + PieceTypeEnum.Queen]:
-			'https://upload.wikimedia.org/wikipedia/commons/1/15/Chess_qlt45.svg',
-		[Color.White + PieceTypeEnum.Rook]:
-			'https://upload.wikimedia.org/wikipedia/commons/7/72/Chess_rlt45.svg',
-		[Color.White + PieceTypeEnum.Bishop]:
-			'https://upload.wikimedia.org/wikipedia/commons/b/b1/Chess_blt45.svg',
-		[Color.White + PieceTypeEnum.Knight]:
-			'https://upload.wikimedia.org/wikipedia/commons/7/70/Chess_nlt45.svg',
-		[Color.White + PieceTypeEnum.Pawn]:
-			'https://upload.wikimedia.org/wikipedia/commons/4/45/Chess_plt45.svg'
-	};
-</script>
-
 <script lang="ts">
-	import { Color } from '$lib/enums/color';
 	import type { Piece as PieceType } from '../lib/types/piece';
+	import ImagePiece from './image-piece.svelte';
 	export let piece: PieceType;
 </script>
 
 {#if piece}
 	<div class="piece">
-		<img
-			class="piece-image"
-			src={images[piece.color + piece.type]}
-			alt={`this is a ${piece.color} ${piece.type}`}
-		/>
+		<ImagePiece {piece} />
 	</div>
 {/if}
 
@@ -49,11 +15,5 @@
 		width: 100px;
 		height: 100px;
 		z-index: 1;
-	}
-
-	.piece-image {
-		width: 100%;
-		height: 100%;
-		z-index: -9;
 	}
 </style>

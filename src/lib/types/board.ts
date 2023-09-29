@@ -1,12 +1,22 @@
 import type { Color } from "$lib/enums/color";
 import type { PieceType } from "$lib/enums/piece-type";
+import type { Move, MovementMove, PromotionMove } from "./move";
 import type { Piece } from "./piece";
 
 export class Board {
     playerColor: Color;
     pieces: Piece[][];
+    moves: Move[];
+    turn: number;
 
     move(from: string, to: string) {
+        const turn = this.turn;
+        const movesLength = this.moves.length;
+        if (movesLength % 2 === 1) {
+            this.turn = this.turn + 1;
+        }
+
+
         const [fromX, fromY] = this.stringToLocation(from);
         const [toX, toY] = this.stringToLocation(to);
 
@@ -14,6 +24,16 @@ export class Board {
         const piece = this.pieces[fromY][fromX];
         this.pieces[fromY][fromX] = null;
         this.pieces[toY][toX] = piece;
+
+
+        const move: MovementMove = {
+            type: "movement",
+            piece: piece,
+            from: from,
+            to: to,
+            turn
+        };
+        this.moves.push(move);
     }
 
     promote(on: string, to: PieceType) {
@@ -23,8 +43,16 @@ export class Board {
             color: piece.color,
             type: to
         };
-        console.log(toPiece);
         this.pieces[y][x] = toPiece;
+        const move: PromotionMove = {
+            type: "promotion",
+            piece: piece,
+            on: on,
+            promotion: toPiece,
+            turn: this.turn
+        };
+
+        this.moves.push(move);
     }
 
     private stringToLocation(location: string): number[] {

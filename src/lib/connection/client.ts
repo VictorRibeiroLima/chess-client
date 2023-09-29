@@ -48,12 +48,8 @@ export function promote(to: Piece) {
 }
 
 function registerHandlers(socket: WebSocket) {
-    socket.addEventListener('open', function (event: MessageEvent) {
-        console.log(event);
-    });
 
     socket.addEventListener('message', function (event: MessageEvent) {
-        console.log(event);
         const message: Message = JSON.parse(event.data);
         handleMessage(message);
     });
@@ -118,7 +114,6 @@ function handleDisconnectResult(result: DisconnectResult, state: RoomState) {
 }
 
 function handleMovementResult(result: MovementResult, state: RoomState) {
-    console.log(`Move: ${JSON.stringify(result.movement)}`);
     const movement = result.movement;
     const type = Object.keys(movement)[0];
     const move = movement[type];
@@ -140,8 +135,6 @@ function handleMovementResult(result: MovementResult, state: RoomState) {
 }
 
 function handlePromotionResult(result: PromotionResult, state: RoomState) {
-
-    console.log(`Promotion: ${JSON.stringify(result.promotion)}`);
 
     const promotion = result.promotion;
     const on = promotion.position;

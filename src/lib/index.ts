@@ -9,5 +9,7 @@ export function createBoard(pieces: Piece[][], color: Color): Board {
     const board = new Board();
     board.playerColor = color;
     board.pieces = pieces;
+    board.moves = [];
+    board.turn = 0;
     return board;
 }

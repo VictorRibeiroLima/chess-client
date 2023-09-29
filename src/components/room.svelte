@@ -6,6 +6,7 @@
 	import type { Color } from '$lib/enums/color';
 	import { getModalStore, type ModalComponent, type ModalSettings } from '@skeletonlabs/skeleton';
 	import Promotion from './promotion.svelte';
+	import History from './history.svelte';
 	const modalStore = getModalStore();
 	let roomId = '';
 	let error: string = undefined;
@@ -35,16 +36,14 @@
 
 	onMount(() => {
 		roomStore.subscribe((state) => {
-			if (state.board) {
-				roomId = state.roomId;
-				board = state.board;
-				error = state.error;
-				winner = state.winner;
-				enemyId = state.enemyId;
-				check = state.check;
-				if (state.promotion) {
-					loadModal();
-				}
+			roomId = state.roomId;
+			board = state.board;
+			error = state.error;
+			winner = state.winner;
+			enemyId = state.enemyId;
+			check = state.check;
+			if (state.promotion) {
+				loadModal();
 			}
 		});
 	});
@@ -70,8 +69,19 @@
 		{#if !enemyId}
 			<h1 class="font-extrabold" style="font-size: large; color: sienna;">Waiting for enemy...</h1>
 		{/if}
-		<Board {board} />
+		<div style="display: flex; flex-direction: row;">
+			<div class="spacer" />
+			<Board {board} />
+			<History {board} />
+		</div>
 	{:else}
 		<h1 class="font-extrabold" style="font-size: xx-large; color: sienna;">Loading...</h1>
 	{/if}
 </div>
+
+<style>
+	.spacer {
+		width: 155px;
+		margin-right: 10px;
+	}
+</style>
