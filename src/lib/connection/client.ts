@@ -1,3 +1,4 @@
+
 import { createBoard } from '$lib';
 import type { Board } from '$lib/types/board';
 import type { Piece } from '$lib/types/piece';
@@ -13,13 +14,11 @@ let board: Board;
 
 
 export function start() {
-    board = createBoard();
     socket = new WebSocket('wss://chess-server-for39.ondigitalocean.app/ws/room/create');
     registerHandlers(socket);
 }
 
 export function join(roomId: string) {
-    board = createBoard();
     socket = new WebSocket(`wss://chess-server-for39.ondigitalocean.app/ws/room/${roomId}`);
     registerHandlers(socket);
 }
@@ -98,15 +97,16 @@ function handleSuccess(message: SuccessMessage, state: RoomState) {
 }
 
 function handleConnectResult(result: ConnectResult, state: RoomState) {
-    if (!state.selfId) {
-        console.log(`Connected as ${result.connect.clientId}`);
-        console.log(`Color: ${result.connect.color}`);
-        board.playerColor = result.connect.color;
-        state.selfId = result.connect.clientId;
-        state.roomId = result.connect.roomId;
+    const connect = result.connect;
+    if (connect.conType === 'selfClient') {
+        state.selfId = connect.clientId;
+        state.enemyId = connect.enemyId;
+        state.roomId = connect.roomId;
+        const board = createBoard(connect.pieces, connect.color);
+        state.board = board;
+        console.log(`Connected to room ${connect.roomId}`);
     } else {
-        console.log(`Enemy connected as ${result.connect.clientId}`);
-        state.enemyId = result.connect.clientId;
+        state.enemyId = connect.clientId;
     }
 }
 

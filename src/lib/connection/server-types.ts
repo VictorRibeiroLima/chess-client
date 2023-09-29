@@ -1,3 +1,4 @@
+import type { Piece } from "$lib/types/piece";
 import type { Color } from "../enums/color";
 import type { PieceType } from "../enums/piece-type";
 
@@ -35,8 +36,11 @@ export type WinnerResult = {
 export type ConnectResult = {
     connect: {
         clientId: string;
+        enemyId?: string;
         roomId: string;
         color: Color;
+        pieces: Piece[][];
+        conType: "selfClient" | "enemyClient"
     }
 
 }

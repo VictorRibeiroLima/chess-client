@@ -1,58 +1,13 @@
-import { Color } from './enums/color';
-import { PieceType } from './enums/piece-type';
+import type { Color } from './enums/color';
 import { Board } from './types/board';
+import type { Piece } from './types/piece';
 
 // place files you want to import through the `$lib` alias in this folder.
 export { start, disconnect, roomStore } from './connection/client';
 
-export function createBoard(): Board {
+export function createBoard(pieces: Piece[][], color: Color): Board {
     const board = new Board();
-    board.playerColor = Color.White;
-    board.pieces = [
-        [
-            { color: Color.White, type: PieceType.Rook },
-            { color: Color.White, type: PieceType.Knight },
-            { color: Color.White, type: PieceType.Bishop },
-            { color: Color.White, type: PieceType.Queen },
-            { color: Color.White, type: PieceType.King },
-            { color: Color.White, type: PieceType.Bishop },
-            { color: Color.White, type: PieceType.Knight },
-            { color: Color.White, type: PieceType.Rook },
-        ],
-        [
-            { color: Color.White, type: PieceType.Pawn },
-            { color: Color.White, type: PieceType.Pawn },
-            { color: Color.White, type: PieceType.Pawn },
-            { color: Color.White, type: PieceType.Pawn },
-            { color: Color.White, type: PieceType.Pawn },
-            { color: Color.White, type: PieceType.Pawn },
-            { color: Color.White, type: PieceType.Pawn },
-            { color: Color.White, type: PieceType.Pawn },
-        ],
-        [null, null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null, null],
-        [
-            { color: Color.Black, type: PieceType.Pawn },
-            { color: Color.Black, type: PieceType.Pawn },
-            { color: Color.Black, type: PieceType.Pawn },
-            { color: Color.Black, type: PieceType.Pawn },
-            { color: Color.Black, type: PieceType.Pawn },
-            { color: Color.Black, type: PieceType.Pawn },
-            { color: Color.Black, type: PieceType.Pawn },
-            { color: Color.Black, type: PieceType.Pawn },
-        ],
-        [
-            { color: Color.Black, type: PieceType.Rook },
-            { color: Color.Black, type: PieceType.Knight },
-            { color: Color.Black, type: PieceType.Bishop },
-            { color: Color.Black, type: PieceType.Queen },
-            { color: Color.Black, type: PieceType.King },
-            { color: Color.Black, type: PieceType.Bishop },
-            { color: Color.Black, type: PieceType.Knight },
-            { color: Color.Black, type: PieceType.Rook },
-        ],
-    ];
+    board.playerColor = color;
+    board.pieces = pieces;
     return board;
 }
