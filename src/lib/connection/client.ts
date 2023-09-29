@@ -102,9 +102,7 @@ function handleConnectResult(result: ConnectResult, state: RoomState) {
         state.selfId = connect.clientId;
         state.enemyId = connect.enemyId;
         state.roomId = connect.roomId;
-        const board = createBoard(connect.pieces, connect.color);
-        state.board = board;
-        console.log(`Connected to room ${connect.roomId}`);
+        board = createBoard(connect.pieces, connect.color);
     } else {
         state.enemyId = connect.clientId;
     }
