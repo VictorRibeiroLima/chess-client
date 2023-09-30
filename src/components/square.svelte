@@ -43,5 +43,34 @@
 	on:drop={onDragDrop}
 	on:click={onClick}
 >
+	{#if column === 'a'}
+		<div class="row-label">
+			{row}
+		</div>
+	{/if}
+	{#if x === 7}
+		<div class="column-label">
+			{column}
+		</div>
+	{/if}
+
 	<slot />
 </div>
+
+<style>
+	.row-label {
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 1000;
+		color: black;
+	}
+
+	.column-label {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		z-index: 1000;
+		color: black;
+	}
+</style>

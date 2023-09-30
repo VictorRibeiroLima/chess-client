@@ -1,4 +1,5 @@
 <script lang="ts">
+	import MoveLine from './move-line.svelte';
 	import type { Board } from '$lib/types/board';
 	import type { Move } from '$lib/types/move';
 	import ImagePiece from './image-piece.svelte';
@@ -12,23 +13,39 @@
 </script>
 
 <div class="history">
-	{#each reversedMoves as move}
-		<div class="line">
-			<div>
-				<ImagePiece piece={move.piece} />
-			</div>
-			<div class="desc">
-				{#if move.type === 'movement'}
-					<p>{move.from} -> {move.to}</p>
-				{:else if move.type === 'promotion'}
-					<p>-></p>
-					<div style="width: 40%;">
-						<ImagePiece piece={move.promotion} />
+	{#each reversedMoves as move, index}
+		{#if reversedMoves.length % 2 !== 0}
+			{#if index === 0}
+				<div class="box">
+					<div class="line">
+						<div class="desc">
+							<p>Turn {move.turn + 1}</p>
+						</div>
 					</div>
-					<p>| {move.on}</p>
-				{/if}
+					<MoveLine {move} />
+				</div>
+			{:else if index % 2 !== 0}
+				<div class="box">
+					<div class="line">
+						<div class="desc">
+							<p>Turn {move.turn + 1}</p>
+						</div>
+					</div>
+					<MoveLine {move} />
+					<MoveLine move={reversedMoves[index + 1]} />
+				</div>
+			{/if}
+		{:else if index % 2 === 0}
+			<div class="box">
+				<div class="line">
+					<div class="desc">
+						<p>Turn {move.turn + 1}</p>
+					</div>
+				</div>
+				<MoveLine {move} />
+				<MoveLine move={reversedMoves[index + 1]} />
 			</div>
-		</div>
+		{/if}
 	{/each}
 </div>
 
@@ -53,5 +70,9 @@
 		align-items: center;
 		color: sienna;
 		font-size: large;
+	}
+
+	.box {
+		border-bottom: 2px solid black;
 	}
 </style>

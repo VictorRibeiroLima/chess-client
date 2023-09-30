@@ -36,6 +36,31 @@ export class Board {
         this.moves.push(move);
     }
 
+    enPassant(from: string, to: string) {
+        const turn = this.turn;
+        const movesLength = this.moves.length;
+        if (movesLength % 2 === 1) {
+            this.turn = this.turn + 1;
+        }
+
+        const [fromX, fromY] = this.stringToLocation(from);
+        const [toX, toY] = this.stringToLocation(to);
+
+        const piece = this.pieces[fromY][fromX];
+        this.pieces[fromY][fromX] = null;
+        this.pieces[toY][toX] = piece;
+        this.pieces[fromY][toX] = null;
+
+        const move: MovementMove = {
+            type: "movement",
+            piece: piece,
+            from: from,
+            to: to,
+            turn
+        };
+        this.moves.push(move);
+    }
+
     promote(on: string, to: PieceType) {
         const [x, y] = this.stringToLocation(on);
         const piece = this.pieces[y][x];

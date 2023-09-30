@@ -118,7 +118,15 @@ function handleMovementResult(result: MovementResult, state: RoomState) {
     const type = Object.keys(movement)[0];
     const move = movement[type];
 
-    if (type !== 'castling') {
+    console.log(`Move: ${JSON.stringify(movement)}`);
+
+    if (type === 'enPassant') {
+        const from = move[0];
+        const to = move[1];
+
+        board.enPassant(from, to);
+    }
+    else if (type !== 'castling') {
         const from = move[0];
         const to = move[1];
 
