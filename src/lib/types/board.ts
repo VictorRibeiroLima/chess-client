@@ -9,6 +9,14 @@ export class Board {
     moves: Move[];
     turn: number;
 
+
+    get lastMove(): Move {
+        if (this.moves.length === 0) {
+            return null;
+        }
+        return this.moves[this.moves.length - 1];
+    }
+
     move(from: string, to: string) {
         const turn = this.turn;
         const movesLength = this.moves.length;
@@ -22,6 +30,7 @@ export class Board {
 
 
         const piece = this.pieces[fromY][fromX];
+        const capture = this.pieces[toY][toX];
         this.pieces[fromY][fromX] = null;
         this.pieces[toY][toX] = piece;
 
@@ -31,7 +40,8 @@ export class Board {
             piece: piece,
             from: from,
             to: to,
-            turn
+            turn,
+            capture
         };
         this.moves.push(move);
     }
@@ -79,6 +89,7 @@ export class Board {
 
         this.moves.push(move);
     }
+
 
     private stringToLocation(location: string): number[] {
         const [fromCol, fromRow] = location.split("");

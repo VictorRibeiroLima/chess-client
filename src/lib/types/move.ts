@@ -8,6 +8,7 @@ export type MovementMove = {
     piece: Piece;
     from: string;
     to: string;
+    capture?: Piece;
 }
 
 export type PromotionMove = {

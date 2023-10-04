@@ -1,12 +1,13 @@
 <script lang="ts">
 	import type { Board as BoardType } from '$lib/types/board';
-	import { onDestroy, onMount } from 'svelte';
+	import { afterUpdate, onDestroy, onMount } from 'svelte';
 	import { disconnect, roomStore } from '$lib';
 	import Board from './board.svelte';
 	import type { Color } from '$lib/enums/color';
 	import { getModalStore, type ModalComponent, type ModalSettings } from '@skeletonlabs/skeleton';
 	import Promotion from './promotion.svelte';
 	import History from './history.svelte';
+	import { boardStore } from '$lib/connection/client';
 	const modalStore = getModalStore();
 	let roomId = '';
 	let error: string = undefined;
@@ -14,7 +15,7 @@
 	//TODO: Reset button on winner
 	let winner: Color = undefined;
 	let check: boolean = false;
-	let board: BoardType;
+	let board: BoardType = undefined;
 
 	const loadModal = () => {
 		const modalComponent: ModalComponent = {
@@ -37,7 +38,6 @@
 	onMount(() => {
 		roomStore.subscribe((state) => {
 			roomId = state.roomId;
-			board = state.board;
 			error = state.error;
 			winner = state.winner;
 			enemyId = state.enemyId;
@@ -46,9 +46,20 @@
 				loadModal();
 			}
 		});
+
+		boardStore.subscribe((boardState) => {
+			board = boardState;
+		});
 	});
 
 	onDestroy(() => {
+		board = undefined;
+		roomId = '';
+		error = undefined;
+		winner = undefined;
+		enemyId = undefined;
+		check = false;
+
 		disconnect();
 	});
 </script>

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { move } from '$lib/connection/client';
 	import { Color } from '$lib/enums/color';
+	import { afterUpdate } from 'svelte';
 	import type { Board as BoardType } from '../lib/types/board';
 	import Piece from './piece.svelte';
 	import Square from './square.svelte';
@@ -16,6 +17,12 @@
 
 	let from: string;
 	let to: string;
+	let movement: HTMLAudioElement = new Audio(
+		'https://images.chesscomfiles.com/chess-themes/sounds/_MP3_/default/promote.mp3'
+	);
+	let capture: HTMLAudioElement = new Audio(
+		'http://images.chesscomfiles.com/chess-themes/sounds/_MP3_/default/capture.mp3'
+	);
 
 	const onDragStart = (event: DragEvent) => {
 		const square = event.currentTarget as HTMLDivElement;
@@ -30,6 +37,17 @@
 			move(from, to);
 		}
 	};
+
+	afterUpdate(() => {
+		const lastMove = board?.lastMove;
+		if (board && lastMove) {
+			if (lastMove.type === 'movement' && lastMove.capture) {
+				capture.play();
+			} else {
+				movement.play();
+			}
+		}
+	});
 </script>
 
 <div>

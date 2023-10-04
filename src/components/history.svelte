@@ -2,7 +2,6 @@
 	import MoveLine from './move-line.svelte';
 	import type { Board } from '$lib/types/board';
 	import type { Move } from '$lib/types/move';
-	import ImagePiece from './image-piece.svelte';
 
 	export let board: Board;
 	let reversedMoves: Move[] = [];
