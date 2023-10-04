@@ -17,9 +17,7 @@
 
 	let from: string;
 	let to: string;
-	let movement: HTMLAudioElement = new Audio(
-		'https://images.chesscomfiles.com/chess-themes/sounds/_MP3_/default/promote.mp3'
-	);
+	let movement: HTMLAudioElement = new Audio('sounds/movement.mp3');
 	let capture: HTMLAudioElement = new Audio(
 		'http://images.chesscomfiles.com/chess-themes/sounds/_MP3_/default/capture.mp3'
 	);
