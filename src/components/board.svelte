@@ -5,6 +5,7 @@
 	import type { Board as BoardType } from '../lib/types/board';
 	import Piece from './piece.svelte';
 	import Square from './square.svelte';
+	import { capture, movement } from '$lib/assets/sounds';
 
 	export let board: BoardType;
 
@@ -17,10 +18,6 @@
 
 	let from: string;
 	let to: string;
-	let movement: HTMLAudioElement = new Audio('sounds/movement.mp3');
-	let capture: HTMLAudioElement = new Audio(
-		'http://images.chesscomfiles.com/chess-themes/sounds/_MP3_/default/capture.mp3'
-	);
 
 	const onDragStart = (event: DragEvent) => {
 		const square = event.currentTarget as HTMLDivElement;
