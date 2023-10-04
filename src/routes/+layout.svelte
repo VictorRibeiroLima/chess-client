@@ -12,7 +12,7 @@
 
 <style>
 	.chess-background {
-		background-image: url('images/chess-background.jpg');
+		background-image: url('/images/chess-background.jpg');
 		background-size: cover;
 		background-position: center;
 		background-repeat: no-repeat;
