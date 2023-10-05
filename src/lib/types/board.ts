@@ -1,5 +1,5 @@
 
-import type { Color } from "$lib/enums/color";
+import { Color } from "$lib/enums/color";
 import type { PieceType } from "$lib/enums/piece-type";
 import type { Move, MoveHistory, Promotion } from "./move";
 import type { Piece } from "./piece";
@@ -22,10 +22,6 @@ export class Board {
         const type = Object.keys(movement)[0];
         const moveT = movement[type];
         const turn = this.turn;
-        const movesLength = this.moves.length;
-        if (movesLength % 2 === 1) {
-            this.turn = this.turn + 1;
-        }
 
         let piece: Piece;
 
@@ -52,6 +48,10 @@ export class Board {
             movement: movement,
         }
 
+        if (piece.color === Color.Black) {
+            this.turn++;
+        }
+
         this.moves.push(history);
     }
 
@@ -65,6 +65,15 @@ export class Board {
             color: piece.color,
             type: to
         };
+        let turn: number;
+        if (piece.color === Color.Black) {
+            turn = this.turn - 1;
+        }
+        else {
+            turn = this.turn;
+        }
+
+
         this.pieces[y][x] = toPiece;
 
         const promotion: Promotion = {
@@ -75,7 +84,7 @@ export class Board {
         const move: MoveHistory = {
             piece: piece,
             promotion: promotion,
-            turnNumber: this.turn,
+            turnNumber: turn,
         };
 
         this.moves.push(move);

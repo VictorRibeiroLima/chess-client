@@ -8,6 +8,7 @@
 
 	$: {
 		reversedMoves = board.moves.slice().reverse();
+		console.log(reversedMoves);
 	}
 </script>
 

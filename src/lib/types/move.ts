@@ -41,3 +41,16 @@ export type MoveInitialDoubleAdvance = {
 } & BasicMove;
 
 
+export function getFromTo(movement: Move): [string, string] {
+  const type = Object.keys(movement)[0];
+  const move = movement[type];
+
+  if (type === 'castling') {
+    const kingMove = move[0];
+
+    return kingMove;
+  }
+
+  return move;
+}
+

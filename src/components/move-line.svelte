@@ -1,25 +1,54 @@
 <script lang="ts">
-	import type { MoveHistory } from '$lib/types/move';
+	import type { Move, MoveCapture, MoveHistory, MoveValid, Promotion } from '$lib/types/move';
+	import type { Piece } from '$lib/types/piece';
 	import ImagePiece from './image-piece.svelte';
 
 	export let move: MoveHistory;
+	let piece: Piece;
+	let from: string;
+	let to: string;
+	let movement: Move;
+	let promotion: Promotion;
+
+	$: {
+		piece = move.piece;
+
+		promotion = move.promotion;
+
+		movement = move.movement;
+
+		if (movement) {
+			const type = Object.keys(movement)[0];
+			const moveT = movement[type];
+
+			if (type === 'castling') {
+				const kingMove: [string, string] = move[0];
+
+				from = kingMove[0];
+				to = kingMove[1];
+			} else {
+				from = moveT[0];
+				to = moveT[1];
+			}
+		}
+	}
 
 	//TODO: fix movement
 </script>
 
 <div class="line">
 	<div>
-		<ImagePiece piece={move.piece} />
+		<ImagePiece {piece} />
 	</div>
 	<div class="desc">
-		{#if move.movement}
-			<p>{move.movement} -> {move.movement}</p>
-		{:else if move.promotion}
+		{#if movement}
+			<p>{from} -> {to}</p>
+		{:else if promotion}
 			<p>-></p>
 			<div style="width: 40%;">
-				<ImagePiece piece={move.promotion.to} />
+				<ImagePiece piece={promotion.to} />
 			</div>
-			<p>| {move.promotion.on}</p>
+			<p>| {promotion.on}</p>
 		{/if}
 	</div>
 </div>
