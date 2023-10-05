@@ -1,8 +1,10 @@
 <script lang="ts">
-	import type { Move } from '$lib/types/move';
+	import type { MoveHistory } from '$lib/types/move';
 	import ImagePiece from './image-piece.svelte';
 
-	export let move: Move;
+	export let move: MoveHistory;
+
+	//TODO: fix movement
 </script>
 
 <div class="line">
@@ -10,14 +12,14 @@
 		<ImagePiece piece={move.piece} />
 	</div>
 	<div class="desc">
-		{#if move.type === 'movement'}
-			<p>{move.from} -> {move.to}</p>
-		{:else if move.type === 'promotion'}
+		{#if move.movement}
+			<p>{move.movement} -> {move.movement}</p>
+		{:else if move.promotion}
 			<p>-></p>
 			<div style="width: 40%;">
-				<ImagePiece piece={move.promotion} />
+				<ImagePiece piece={move.promotion.to} />
 			</div>
-			<p>| {move.on}</p>
+			<p>| {move.promotion.on}</p>
 		{/if}
 	</div>
 </div>

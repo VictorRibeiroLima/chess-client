@@ -112,7 +112,7 @@ function handleConnectResult(result: ConnectResult) {
         state.roomState.selfId = connect.clientId;
         state.roomState.enemyId = connect.enemyId;
         state.roomState.roomId = connect.roomId;
-        state.board = createBoard(connect.pieces, connect.color);
+        state.board = createBoard(connect.pieces, connect.color, connect.moves);
         boardState.set(state.board);
     } else {
         state.roomState.enemyId = connect.clientId;
@@ -131,29 +131,10 @@ function handleDisconnectResult(result: DisconnectResult) {
 
 function handleMovementResult(result: MovementResult) {
     const movement = result.movement;
-    const type = Object.keys(movement)[0];
-    const move = movement[type];
-
-    if (type === 'enPassant') {
-        const from = move[0];
-        const to = move[1];
-
-        state.board.enPassant(from, to);
-    }
-    else if (type !== 'castling') {
-        const from = move[0];
-        const to = move[1];
-
-        state.board.move(from, to);
-    } else {
-        const kingMove = move[0];
-        const rookMove = move[1];
-
-        state.board.move(kingMove[0], kingMove[1]);
-        state.board.move(rookMove[0], rookMove[1]);
-    }
+    state.board.move(movement);
     state.roomState.check = movement.check === state.board.playerColor;
     state.roomState.promotion = movement.promotion === state.board.playerColor;
+
     boardState.set(state.board);
 }
 

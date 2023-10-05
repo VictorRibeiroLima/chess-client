@@ -1,10 +1,10 @@
 <script lang="ts">
 	import MoveLine from './move-line.svelte';
 	import type { Board } from '$lib/types/board';
-	import type { Move } from '$lib/types/move';
+	import type { MoveHistory } from '$lib/types/move';
 
 	export let board: Board;
-	let reversedMoves: Move[] = [];
+	let reversedMoves: MoveHistory[] = [];
 
 	$: {
 		reversedMoves = board.moves.slice().reverse();
@@ -12,47 +12,18 @@
 </script>
 
 <div class="history">
-	{#each reversedMoves as move, index}
-		{#if reversedMoves.length % 2 !== 0}
-			{#if index === 0}
-				<div class="box">
-					<div class="line">
-						<div class="desc">
-							<p>Turn {move.turn + 1}</p>
-						</div>
-					</div>
-					<MoveLine {move} />
-				</div>
-			{:else if index % 2 !== 0}
-				<div class="box">
-					<div class="line">
-						<div class="desc">
-							<p>Turn {move.turn + 1}</p>
-						</div>
-					</div>
-					<MoveLine {move} />
-					<MoveLine move={reversedMoves[index + 1]} />
-				</div>
-			{/if}
-		{:else if index % 2 === 0}
-			<div class="box">
-				<div class="line">
-					<div class="desc">
-						<p>Turn {move.turn + 1}</p>
-					</div>
-				</div>
-				<MoveLine {move} />
-				<MoveLine move={reversedMoves[index + 1]} />
+	{#each reversedMoves as move, i}
+		{#if move.turnNumber !== reversedMoves[i - 1]?.turnNumber}
+			<div class="desc">
+				<p>Turn {move.turnNumber}</p>
 			</div>
 		{/if}
+
+		<MoveLine {move} />
 	{/each}
 </div>
 
 <style>
-	.line {
-		display: flex;
-		flex-direction: row;
-	}
 	.history {
 		margin-left: 10px;
 		width: 155px;
@@ -64,14 +35,11 @@
 	}
 
 	.desc {
+		border-top: 2px solid black;
 		display: flex;
 		flex-direction: row;
 		align-items: center;
 		color: sienna;
 		font-size: large;
-	}
-
-	.box {
-		border-bottom: 2px solid black;
 	}
 </style>

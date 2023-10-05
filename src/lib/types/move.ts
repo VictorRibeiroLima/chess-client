@@ -1,20 +1,43 @@
+import type { Color } from "$lib/enums/color";
 import type { Piece } from "./piece";
 
-export type Move = MovementMove | PromotionMove;
-
-export type MovementMove = {
-    type: "movement";
-    turn: number;
-    piece: Piece;
-    from: string;
-    to: string;
-    capture?: Piece;
+type BasicMove = {
+  check?: Color;
+  promotion?: Color;
 }
 
-export type PromotionMove = {
-    type: "promotion";
-    turn: number;
-    piece: Piece;
-    on: string;
-    promotion: Piece;
+export type MoveHistory = {
+  turnNumber: number;
+  piece: Piece;
+  movement?: Move;
+  promotion?: Promotion;
 }
+
+export type Promotion = {
+  on: string;
+  to: Piece;
+}
+
+export type Move = MoveValid | MoveCapture | MoveCastling | MoveEnPassant | MoveInitialDoubleAdvance;
+
+export type MoveValid = {
+  valid: [string, string];
+} & BasicMove;
+
+export type MoveCapture = {
+  capture: [string, string];
+} & BasicMove;
+
+export type MoveCastling = {
+  castling: [[string, string], [string, string]];
+} & BasicMove;
+
+export type MoveEnPassant = {
+  enPassant: [string, string];
+} & BasicMove;
+
+export type MoveInitialDoubleAdvance = {
+  initialDoubleAdvance: [string, string];
+} & BasicMove;
+
+

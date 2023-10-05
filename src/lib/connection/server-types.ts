@@ -1,3 +1,4 @@
+import type { Move, MoveHistory } from "$lib/types/move";
 import type { Piece } from "$lib/types/piece";
 import type { Color } from "../enums/color";
 import type { PieceType } from "../enums/piece-type";
@@ -41,6 +42,7 @@ export type ConnectResult = {
         color: Color;
         pieces: Piece[][];
         conType: "selfClient" | "enemyClient"
+        moves: MoveHistory[];
     }
 
 }
@@ -57,32 +59,3 @@ export type DisconnectResult = {
 export type MovementResult = {
     movement: Move;
 }
-
-type BasicMoveResult = {
-    check?: Color;
-    promotion?: Color;
-}
-
-export type Move = MoveValid | MoveCapture | MoveCastling | MoveEnPassant | MoveInitialDoubleAdvance;
-
-export type MoveValid = {
-    valid: [string, string];
-} & BasicMoveResult;
-
-export type MoveCapture = {
-    capture: [string, string];
-} & BasicMoveResult;
-
-export type MoveCastling = {
-    castling: [[string, string], [string, string]];
-} & BasicMoveResult;
-
-export type MoveEnPassant = {
-    enPassant: [string, string];
-} & BasicMoveResult;
-
-export type MoveInitialDoubleAdvance = {
-    initialDoubleAdvance: [string, string];
-} & BasicMoveResult;
-
-
