@@ -3,7 +3,7 @@ import { createBoard } from '$lib';
 import type { Board } from '$lib/types/board';
 import type { Piece } from '$lib/types/piece';
 import type { RoomState } from './client-types';
-import type { ConnectResult, DisconnectResult, ErrorMessage, Message, MovementResult, PromotionResult, SuccessMessage, WinnerResult } from './server-types';
+import type { ConnectResult, DisconnectResult, ErrorMessage, Message, MovementResult, PromotionResult, SuccessMessage, TimerMessage, WinnerResult } from './server-types';
 import { readonly, writable } from 'svelte/store';
 
 type State = {
@@ -74,7 +74,13 @@ function registerHandlers(socket: WebSocket) {
 function handleMessage(message: Message) {
     if (message.error) {
         handleError(message.error);
-    } else { handleSuccess(message.success); }
+    } else if (message.success) {
+        handleSuccess(message.success);
+    }
+    else if (message.timer) {
+        handleTimerMessage(message.timer);
+    }
+
     roomState.set(state.roomState);
 }
 
@@ -103,6 +109,16 @@ function handleSuccess(message: SuccessMessage) {
         handlePromotionResult(result as PromotionResult);
     } else if ((result as WinnerResult).winner) {
         handleWinnerResult(result as WinnerResult);
+    }
+}
+
+function handleTimerMessage(message: TimerMessage) {
+    const timer = message.time;
+    const selfId = state.roomState.selfId;
+    if (selfId === message.clientId) {
+        console.log(`Timer: ${timer}`);
+    } else {
+        console.log(`Enemy timer: ${timer}`);
     }
 }
 

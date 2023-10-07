@@ -6,6 +6,7 @@ import type { PieceType } from "../enums/piece-type";
 export type Message = {
     success?: SuccessMessage;
     error?: ErrorMessage;
+    timer?: TimerMessage;
 };
 
 export type ErrorMessage = {
@@ -18,6 +19,12 @@ export type SuccessMessage = {
     clientId: string;
     roomId: string;
     result: Result;
+}
+
+export type TimerMessage = {
+    clientId?: string;
+    roomId: string;
+    time: number;
 }
 
 export type Result = PromotionResult | WinnerResult | ConnectResult | DisconnectResult | MovementResult;
