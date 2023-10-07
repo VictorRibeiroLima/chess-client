@@ -22,7 +22,7 @@
 			const moveT = movement[type];
 
 			if (type === 'castling') {
-				const kingMove: [string, string] = move[0];
+				const kingMove: [string, string] = moveT[0];
 
 				from = kingMove[0];
 				to = kingMove[1];
