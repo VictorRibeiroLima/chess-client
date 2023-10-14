@@ -10,6 +10,8 @@ type State = {
     board: Board;
 }
 
+let intervalId: NodeJS.Timeout;
+
 const state: State = {
     roomState: {} as RoomState,
     board: undefined
@@ -37,6 +39,8 @@ export function join(roomId: string) {
     const url = `wss://chess-server-for39.ondigitalocean.app/ws/room/${roomId}`;
     startSocket(url);
 }
+
+
 
 
 export function disconnect() {
@@ -72,28 +76,28 @@ export function promote(to: Piece) {
 
 function startSocket(url: string) {
     socket = new WebSocket(url);
-    registerHandlers(socket);
+
+    socket.onopen = () => {
+        clearInterval(intervalId);
+        socket.addEventListener('message', function (event: MessageEvent) {
+            const message: Message = JSON.parse(event.data);
+            handleMessage(message);
+        });
+
+        const retryInterval = 1000;
+        socket.addEventListener('close', function (event: CloseEvent) {
+            console.log(`Socket closed with code ${event.code}`);
+            if (event.code !== 1000) {
+                const url = `wss://chess-server-for39.ondigitalocean.app/ws/room/${state.roomState.roomId}`;
+                intervalId = setInterval(() => {
+                    startSocket(url);
+                }, retryInterval);
+            }
+        });
+
+    }
 }
 
-function registerHandlers(socket: WebSocket) {
-
-    const retryInterval = 3000;
-
-    socket.addEventListener('message', function (event: MessageEvent) {
-        const message: Message = JSON.parse(event.data);
-        handleMessage(message);
-    });
-
-    socket.addEventListener('close', function (event: CloseEvent) {
-        console.log(`Socket closed with code ${event.code}`);
-        if (event.code !== 1000) {
-            const url = `wss://chess-server-for39.ondigitalocean.app/ws/room/${state.roomState.roomId}`;
-            setInterval(() => {
-                startSocket(url);
-            }, retryInterval);
-        }
-    });
-}
 
 function handleMessage(message: Message) {
     if (message.error) {
