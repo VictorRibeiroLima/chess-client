@@ -25,6 +25,7 @@ export type TimerMessage = {
     clientId?: string;
     roomId: string;
     time: number;
+    color: Color;
 }
 
 export type Result = PromotionResult | WinnerResult | ConnectResult | DisconnectResult | MovementResult;
@@ -50,6 +51,8 @@ export type ConnectResult = {
         pieces: Piece[][];
         conType: "selfClient" | "enemyClient"
         moves: MoveHistory[];
+        whiteTimer: number;
+        blackTimer: number;
     }
 
 }

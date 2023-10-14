@@ -1,6 +1,5 @@
 
-import { createBoard } from '$lib';
-import type { Board } from '$lib/types/board';
+import { Board } from '$lib/types/board';
 import type { Piece } from '$lib/types/piece';
 import type { RoomState } from './client-types';
 import type { ConnectResult, DisconnectResult, ErrorMessage, Message, MovementResult, PromotionResult, SuccessMessage, TimerMessage, WinnerResult } from './server-types';
@@ -17,10 +16,14 @@ const state: State = {
 }
 const roomState = writable({} as RoomState)
 const boardState = writable(undefined);
-
+const enemyTimer = writable(0);
+const selfTimer = writable(0);
 
 export const roomStore = readonly(roomState);
 export const boardStore = readonly(boardState);
+export const enemyTimerStore = readonly(enemyTimer);
+export const selfTimerStore = readonly(selfTimer);
+
 
 let socket: WebSocket;
 
@@ -41,6 +44,8 @@ export function disconnect() {
     boardState.set(undefined);
     state.board = undefined;
     state.roomState = {} as RoomState;
+    enemyTimer.set(0);
+    selfTimer.set(0);
 }
 
 export function move(from: string, to: string) {
@@ -79,6 +84,7 @@ function handleMessage(message: Message) {
     }
     else if (message.timer) {
         handleTimerMessage(message.timer);
+        return; //TODO: bad implementation,i need to return early so we don't trigger the roomState.set
     }
 
     roomState.set(state.roomState);
@@ -114,24 +120,32 @@ function handleSuccess(message: SuccessMessage) {
 
 function handleTimerMessage(message: TimerMessage) {
     const timer = message.time;
-    const selfId = state.roomState.selfId;
-    if (selfId === message.clientId) {
-        console.log(`Timer: ${timer}`);
+    const enemyId = state.roomState.enemyId;
+    if (enemyId === message.clientId) {
+        enemyTimer.set(timer);
     } else {
-        console.log(`Enemy timer: ${timer}`);
+        selfTimer.set(timer);
     }
 }
 
 function handleConnectResult(result: ConnectResult) {
     const connect = result.connect;
+    console.log(JSON.stringify(connect));
     if (connect.conType === 'selfClient') {
         state.roomState.selfId = connect.clientId;
         state.roomState.enemyId = connect.enemyId;
         state.roomState.roomId = connect.roomId;
-        state.board = createBoard(connect.pieces, connect.color, connect.moves);
+        state.board = new Board(connect.pieces, connect.color, connect.moves);
+        if (connect.color === 'white') {
+            enemyTimer.set(connect.blackTimer);
+            selfTimer.set(connect.whiteTimer);
+        } else {
+            enemyTimer.set(connect.whiteTimer);
+            selfTimer.set(connect.blackTimer);
+        }
         boardState.set(state.board);
     } else {
-        state.roomState.enemyId = connect.clientId;
+        state.roomState.enemyId = connect.enemyId;
     }
 }
 

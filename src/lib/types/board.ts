@@ -10,6 +10,23 @@ export class Board {
     moves: MoveHistory[];
     turn: number;
 
+    constructor(pieces: Piece[][], color: Color, moves: MoveHistory[]) {
+        this.playerColor = color;
+        this.pieces = pieces;
+        this.moves = moves;
+        if (moves.length > 0) {
+            const lastMove = moves[moves.length - 1];
+            if (lastMove.piece.color === Color.Black) {
+                this.turn = lastMove.turnNumber + 1;
+            } else {
+                this.turn = lastMove.turnNumber;
+            }
+        } else {
+            this.turn = 1;
+        }
+
+    }
+
 
     get lastMove(): MoveHistory {
         if (this.moves.length === 0) {

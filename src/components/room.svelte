@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Board as BoardType } from '$lib/types/board';
-	import { afterUpdate, onDestroy, onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import { disconnect, roomStore } from '$lib';
 	import Board from './board.svelte';
 	import type { Color } from '$lib/enums/color';
@@ -8,10 +8,13 @@
 	import Promotion from './promotion.svelte';
 	import History from './history.svelte';
 	import { boardStore } from '$lib/connection/client';
+	import Info from './info.svelte';
 	const modalStore = getModalStore();
 	let roomId = '';
 	let error: string = undefined;
-	let enemyId: string = undefined;
+
+	let selfId: string = '';
+	let enemyId: string = '';
 	//TODO: Reset button on winner
 	let winner: Color = undefined;
 	let check: boolean = false;
@@ -41,6 +44,7 @@
 			error = state.error;
 			winner = state.winner;
 			enemyId = state.enemyId;
+			selfId = state.selfId;
 			check = state.check;
 			if (state.promotion) {
 				loadModal();
@@ -58,6 +62,7 @@
 		error = undefined;
 		winner = undefined;
 		enemyId = undefined;
+		selfId = undefined;
 		check = false;
 
 		disconnect();
@@ -81,7 +86,7 @@
 			<h1 class="font-extrabold" style="font-size: large; color: sienna;">Waiting for enemy...</h1>
 		{/if}
 		<div style="display: flex; flex-direction: row;">
-			<div class="spacer" />
+			<Info {selfId} {enemyId} />
 			<Board {board} />
 			<History {board} />
 		</div>
@@ -91,8 +96,4 @@
 </div>
 
 <style>
-	.spacer {
-		width: 155px;
-		margin-right: 10px;
-	}
 </style>
