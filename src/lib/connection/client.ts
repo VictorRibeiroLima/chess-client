@@ -29,17 +29,19 @@ let socket: WebSocket;
 
 
 export function start() {
-    socket = new WebSocket('wss://chess-server-for39.ondigitalocean.app/ws/room/create');
-    registerHandlers(socket);
+    const url = 'wss://chess-server-for39.ondigitalocean.app/ws/room/create';
+    startSocket(url);
 }
 
 export function join(roomId: string) {
-    socket = new WebSocket(`wss://chess-server-for39.ondigitalocean.app/ws/room/${roomId}`);
-    registerHandlers(socket);
+    const url = `wss://chess-server-for39.ondigitalocean.app/ws/room/${roomId}`;
+    startSocket(url);
 }
 
+
 export function disconnect() {
-    socket.close();
+    socket.close(1000);
+    socket = undefined;
     roomState.set({} as RoomState);
     boardState.set(undefined);
     state.board = undefined;
@@ -68,11 +70,28 @@ export function promote(to: Piece) {
     socket.send(JSON.stringify(message));
 }
 
+function startSocket(url: string) {
+    socket = new WebSocket(url);
+    registerHandlers(socket);
+}
+
 function registerHandlers(socket: WebSocket) {
+
+    const retryInterval = 3000;
 
     socket.addEventListener('message', function (event: MessageEvent) {
         const message: Message = JSON.parse(event.data);
         handleMessage(message);
+    });
+
+    socket.addEventListener('close', function (event: CloseEvent) {
+        console.log(`Socket closed with code ${event.code}`);
+        if (event.code !== 1000) {
+            const url = `wss://chess-server-for39.ondigitalocean.app/ws/room/${state.roomState.roomId}`;
+            setInterval(() => {
+                startSocket(url);
+            }, retryInterval);
+        }
     });
 }
 
@@ -130,7 +149,6 @@ function handleTimerMessage(message: TimerMessage) {
 
 function handleConnectResult(result: ConnectResult) {
     const connect = result.connect;
-    console.log(JSON.stringify(connect));
     if (connect.conType === 'selfClient') {
         state.roomState.selfId = connect.clientId;
         state.roomState.enemyId = connect.enemyId;
