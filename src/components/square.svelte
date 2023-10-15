@@ -10,6 +10,7 @@
 		event.preventDefault();
 	};
 	export let onClick = (event: MouseEvent) => {};
+
 	export let role: string;
 	let color: string;
 
@@ -26,18 +27,15 @@
 
 <div
 	style="
-    position: absolute;
     top: {x * 100}px;
     left: {y * 100}px;
-    width: 100px;
-    height: 100px;
     background-color: {color};
-    z-index: 9;
     "
 	id={`${column}${row}`}
 	{role}
 	tabindex="-1"
 	draggable="true"
+	class="square"
 	on:dragstart={onDragStart}
 	on:dragover={onDragOver}
 	on:drop={onDragDrop}
@@ -58,6 +56,13 @@
 </div>
 
 <style>
+	.square {
+		position: absolute;
+		width: 100px;
+		height: 100px;
+		z-index: 9;
+	}
+
 	.row-label {
 		position: absolute;
 		top: 0;

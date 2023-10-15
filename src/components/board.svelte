@@ -6,6 +6,7 @@
 	import Piece from './piece.svelte';
 	import Square from './square.svelte';
 	import { capture, movement } from '$lib/assets/sounds';
+	import type { MoveCapture } from '$lib/types/move';
 
 	export let board: BoardType;
 
@@ -18,6 +19,9 @@
 
 	let from: string;
 	let to: string;
+
+	let fromClick: string;
+	let toClick: string;
 
 	const onDragStart = (event: DragEvent) => {
 		const square = event.currentTarget as HTMLDivElement;
@@ -33,10 +37,24 @@
 		}
 	};
 
+	const onClick = (event: MouseEvent) => {
+		const square = event.currentTarget as HTMLDivElement;
+		if (!fromClick && square.role === 'button') {
+			fromClick = square.id;
+		} else if (fromClick) {
+			toClick = square.id;
+			if (fromClick !== toClick) {
+				move(fromClick, toClick);
+			}
+			fromClick = '';
+			toClick = '';
+		}
+	};
+
 	afterUpdate(() => {
 		const lastMove = board?.lastMove;
 		if (board && lastMove) {
-			if (lastMove.type === 'movement' && lastMove.capture) {
+			if ((lastMove.movement as MoveCapture).capture) {
 				capture.play();
 			} else {
 				movement.play();
@@ -53,11 +71,11 @@
 			{#each rows as row, x}
 				{#each columns as column, y}
 					{#if board.pieces[row - 1][y]}
-						<Square {x} {y} {row} {column} {onDragStart} {onDragDrop} role="button"
+						<Square {x} {y} {row} {column} {onDragStart} {onDragDrop} {onClick} role="button"
 							><Piece piece={board.pieces[row - 1][y]} /></Square
 						>
 					{:else}
-						<Square {x} {y} {row} {column} {onDragDrop} role="none" />
+						<Square {x} {y} {row} {column} {onDragDrop} {onClick} role="none" />
 					{/if}
 				{/each}
 			{/each}
