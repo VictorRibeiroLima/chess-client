@@ -11,10 +11,45 @@
 	export let board: BoardType;
 
 	let rows = [1, 2, 3, 4, 5, 6, 7, 8];
-	let columns = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+	let columns = [
+		{
+			label: 'a',
+			index: 0
+		},
+		{
+			label: 'b',
+			index: 1
+		},
+		{
+			label: 'c',
+			index: 2
+		},
+		{
+			label: 'd',
+			index: 3
+		},
+		{
+			label: 'e',
+			index: 4
+		},
+		{
+			label: 'f',
+			index: 5
+		},
+		{
+			label: 'g',
+			index: 6
+		},
+		{
+			label: 'h',
+			index: 7
+		}
+	];
 
 	if (board.playerColor === Color.White) {
 		rows = rows.reverse();
+	} else {
+		columns = columns.reverse();
 	}
 
 	let from: string;
@@ -70,12 +105,19 @@
 		<div class="board" draggable="false">
 			{#each rows as row, x}
 				{#each columns as column, y}
-					{#if board.pieces[row - 1][y]}
-						<Square {x} {y} {row} {column} {onDragStart} {onDragDrop} {onClick} role="button"
-							><Piece piece={board.pieces[row - 1][y]} /></Square
+					{#if board.pieces[row - 1][column.index]}
+						<Square
+							{x}
+							{y}
+							{row}
+							column={column.label}
+							{onDragStart}
+							{onDragDrop}
+							{onClick}
+							role="button"><Piece piece={board.pieces[row - 1][column.index]} /></Square
 						>
 					{:else}
-						<Square {x} {y} {row} {column} {onDragDrop} {onClick} role="none" />
+						<Square {x} {y} {row} column={column.label} {onDragDrop} {onClick} role="none" />
 					{/if}
 				{/each}
 			{/each}

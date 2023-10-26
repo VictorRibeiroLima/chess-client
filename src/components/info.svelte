@@ -24,11 +24,10 @@
 		display: flex;
 		flex-direction: column;
 		overflow: auto;
-		background-color: rgba(238, 212, 172, 0.75);
 	}
 
 	.player-info {
-		background-color: red;
+		background-color: rgb(39, 38, 36);
 		width: 100%;
 		height: 20%;
 	}

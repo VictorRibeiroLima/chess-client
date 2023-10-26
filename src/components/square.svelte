@@ -41,7 +41,7 @@
 	on:drop={onDragDrop}
 	on:click={onClick}
 >
-	{#if column === 'a'}
+	{#if y === 0}
 		<div class="row-label">
 			{row}
 		</div>

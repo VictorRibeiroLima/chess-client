@@ -23,19 +23,40 @@
 		Waiting...
 	{/if}
 </div>
-<div class="timer">
-	{stringTimer}
+<div class="timer-container">
+	<img
+		src="https://upload.wikimedia.org/wikipedia/commons/b/bd/Another-Clock.gif?20220725113054"
+		alt="Clock GIF"
+		class="clock-gif"
+	/>
+	<div class="timer">
+		{stringTimer}
+	</div>
 </div>
 
 <style>
 	.player-id {
 		width: 100%;
 		height: 50%;
-		background-color: red;
+		font-size: small;
 	}
-	.timer {
+
+	.timer-container {
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
 		width: 100%;
 		height: 50%;
-		background-color: blue;
+	}
+
+	.timer {
+		width: 50%;
+		height: 35%;
+		text-align: center;
+	}
+
+	.clock-gif {
+		max-width: 20%;
+		height: auto;
 	}
 </style>
